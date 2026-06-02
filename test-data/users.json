@@ -1,0 +1,14 @@
+{
+  "readerUser": {
+    "username": "test_reader",
+    "password": "Re-user1234"
+  },
+  "staffUser": {
+    "username": "test_staff",
+    "password": "St-user1234"
+  },
+  "superUser": {
+    "username": "test_super",
+    "password": "Su-user1234"
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "name": "locallibrary-automation",
+  "version": "1.0.0",
+  "description": "Test automation scripts for the LocalLibrary website",
+  "main": "index.js",
+  "scripts": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/archita-at/LocalLibrary-Automation.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/archita-at/LocalLibrary-Automation/issues"
+  },
+  "homepage": "https://github.com/archita-at/LocalLibrary-Automation#readme",
+  "devDependencies": {
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.1"
+  }
+}
