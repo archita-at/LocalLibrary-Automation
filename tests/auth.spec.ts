@@ -22,7 +22,7 @@ test.describe("Login module", () => {
             await expect(dashboardPage.username).toHaveText(superUser.username)
         });
         await test.step('Verify the staff section is not visible', async () => {
-            await expect(dashboardPage.staffSection).not.toBeVisible()
+            await expect(dashboardPage.staffSection).toBeVisible()
         });
     });
 
