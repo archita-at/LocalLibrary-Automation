@@ -6,6 +6,7 @@ import { DashboardPage } from "../pages/DashboardPage";
 import { AuthorFormPage } from "../pages/AuthorFormPage";
 import { AuthorDetailPage } from "../pages/AuthorDetailPage";
 import { createAuthor } from "../utilities/authorFactory";
+import { AuthorDeleteConfirmationPage } from "../pages/AuthorDeleteConfirmationPage";
 
 test.describe("Author management via Super user", () => {
     test.beforeEach("Launch login page and login via super user", async ({ page }) => {
@@ -77,12 +78,8 @@ test.describe("Author management via Super user", () => {
             await authorFormPage.submitAuthorDetails(author.firstName, author.lastName, author.dob);
         });
 
-        await test.step("Verify the update author button is visible", async () => {
-            await expect(authorDetailPage.updateAuthorLink).toBeVisible();
-        });
-
         await test.step("Click the update author button", async () => {
-            await authorDetailPage.updateAuthorLink.click();
+            await authorDetailPage.updateAuthor();
         });
 
         await test.step("Verify the user is redirected to the Update author form page", async () => {
@@ -129,11 +126,41 @@ test.describe("Author management via Super user", () => {
         const authorListPage = new AuthorListPage(page);
         const authorFormPage = new AuthorFormPage(page);
         const authorDetailPage = new AuthorDetailPage(page);
+        const authorDeleteConfirmationPage = new AuthorDeleteConfirmationPage(page);
         const author = createAuthor();
+        let authorUrl: string;
 
         await test.step("Create an author", async () => {
             await authorListPage.navigateToAddNewAuthorPage();
             await authorFormPage.submitAuthorDetails(author.firstName, author.lastName, author.dob);
+            authorUrl = page.url();
         });
-    })
+
+        await test.step("Click the delete author button", async () => {
+            await authorDetailPage.deleteAuthor();
+        });
+
+        await test.step("Verify the user is redirected to the delete author confirmation page", async () => {
+            await expect(page).toHaveURL(/author\/\d+\/delete/);
+            await expect(authorDeleteConfirmationPage.confirmationPageHeading).toHaveText("Delete Confirmation");
+        });
+
+        await test.step("Verify the name of the author to be deleted", async () => {
+            await expect(authorDeleteConfirmationPage.authorFullName).toContainText(author.firstName);
+            await expect(authorDeleteConfirmationPage.authorFullName).toContainText(author.lastName);
+        });
+
+        await test.step("Click the confirmation button", async () => {
+            await authorDeleteConfirmationPage.confirmDelete();
+        });
+
+        await test.step("Verify user is redirected to the Author list page", async () => {
+            await expect(page).toHaveURL(/authors/);
+        });
+
+        await test.step("Verify the author is deleted", async()=>{
+            await page.goto(authorUrl);
+            await expect(page.locator('h1')).toContainText("Not Found");
+        });
+    });
 })
